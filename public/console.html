@@ -1,0 +1,65 @@
+﻿<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>开卷 · 运营中控台</title><link rel="stylesheet" href="/app.css"></head>
+<body class="console">
+<div class="console-app">
+  <header class="topbar">
+    <div class="brand">开卷 <small>运营中控台</small></div>
+    <span class="badge" id="llm-badge">离线演示模式</span>
+    <button class="btn" id="settings-btn" style="padding:6px 12px;font-size:13px">设置</button>
+    <button class="btn" id="reset-btn" style="padding:6px 12px;font-size:13px">重置演示</button>
+    <a href="/h5" class="btn" style="text-decoration:none;padding:6px 12px;font-size:13px">切到读者端 →</a>
+    <div class="cost">本流程 AI 成本 <b id="cost">¥0.00</b><span>传统人力 ≈ 15 小时</span></div>
+  </header>
+  <div class="layout">
+    <aside class="side">
+      <div class="panel">
+        <h3>本场活动</h3>
+        <div class="kv" id="activity-info"><span>加载中…</span></div>
+      </div>
+      <div class="panel">
+        <h3>一句话需求</h3>
+        <textarea id="demand" style="width:100%;min-height:88px;border:1px solid var(--border);border-radius:8px;background:var(--surface-muted);color:var(--text);padding:10px;font-size:13px;line-height:1.7;font-family:inherit"></textarea>
+        <div style="display:flex;gap:8px;margin-top:8px"><button class="btn" id="demand-voice" style="flex:0 0 auto;width:auto">🎤 语音</button><button class="btn" id="demand-polish" style="flex:1;width:auto">AI 排版</button></div>
+        <div id="demand-note" class="muted" style="font-size:11px;margin-top:6px;line-height:1.6"></div>
+        <button class="btn btn-primary" id="start-btn" style="width:100%;margin-top:10px">开始跑流水线</button>
+        <p class="muted" style="font-size:11px;margin-top:8px;line-height:1.6">六步执行，两次人工确认</p>
+      </div>
+      <div class="panel">
+        <h3>问题云</h3>
+        <div id="clusters" class="muted" style="font-size:12px">招募 Agent 完成后出现</div>
+      </div>
+    </aside>
+    <main class="main">
+      <div class="flow" id="flow"></div>
+      <div id="gate-bar"></div>
+      <div class="log" id="log"><div class="t">等待启动流水线…</div></div>
+      <div style="height:16px"></div>
+      <div id="outputs"></div>
+    </main>
+  </div>
+</div>
+<div id="settings-mask" class="settings-mask" hidden>
+  <div class="settings-panel">
+    <h3>模型设置</h3>
+    <div class="preset-grid" id="preset-grid"></div>
+    <div class="settings-field"><label>协议</label><select id="llm-protocol" class="settings-select"><option value="openai">OpenAI 兼容（含 OpenRouter / DeepSeek / 火山 / 智谱 / 硅基流动）</option><option value="anthropic">Anthropic Messages</option><option value="gemini">Google Gemini generateContent</option></select></div>
+    <div class="settings-field"><label>Base URL</label><input id="llm-base" placeholder="https://..."></div>
+    <div class="settings-field"><label>API Key</label><input id="llm-key" type="password" placeholder="sk-..."></div>
+    <div class="settings-field"><label>模型</label><input id="llm-model" placeholder="模型 ID"></div>
+    <div class="settings-actions">
+      <button class="btn" id="settings-test">测试连接</button>
+      <button class="btn btn-primary" id="settings-save">保存</button>
+      <button class="btn" id="settings-close" style="margin-left:auto">关闭</button>
+    </div>
+    <div class="settings-note" id="settings-note"></div>
+  </div>
+</div>
+<script src="/voice.js"></script>
+<script src="/console.js"></script>
+</body></html>
+
+
+
+
+
