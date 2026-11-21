@@ -34,7 +34,7 @@ node server.mjs
 
 ## 接真实模型
 
-编辑 `.env` 后重启：
+复制 `.env.example` 为 `.env`，填好后重启：
 
 ```
 LLM_BASE_URL=https://open.bigmodel.cn/api/paas/v4
@@ -66,8 +66,8 @@ kaijuan/
 ├── db.mjs              # 建表、种子、查询
 ├── agents.mjs          # 六 Agent + 编排循环 + 两处 Gate + 兜底
 ├── lib/seed-data.mjs   # 海淀种子数据（3 场历史活动 + 1 场主角 + 30 条报名）
-├── data.db             # SQLite（删掉即重置）
-├── .env                # 模型网关配置
+├── data.db             # SQLite（首次启动自动生成，不入库；删掉即重置）
+├── .env.example        # 配置模板（复制为 .env 后填写）
 └── public/
     ├── index.html      # 入口
     ├── console.html/js # 中控台
@@ -80,4 +80,46 @@ kaijuan/
 - 月报是 HTML（可一键打印为 PDF），不是 .pptx；pptxgenjs 装不上，赛后接
 - 未接登录，报名写入匿名读者
 - SSE 每 500ms 推一次全量状态，本机演示足够；多客户端并发需换增量推送
+
+---
+
+## English
+
+**Kaijuan (开卷, "open book")** — a 48-hour hackathon vertical slice: an operator console that drives a multi-agent pipeline, plus a reader-facing H5 feed, with data linked end to end.
+
+The interesting part is *why it has no dependencies*. The original plan was Next.js 15 + Prisma + SQLite. On venue Wi-Fi (20–50 KB/s) both the `next` (22 MB) and `@prisma/client` tarballs timed out, so `node_modules` could never finish installing. It was rebuilt with **zero dependencies**:
+
+| Layer | Planned | Actually used | Why |
+|---|---|---|---|
+| Server | Next.js Route Handlers | Node native `http` | no install, no build step |
+| Database | Prisma + SQLite | `node:sqlite` (built into Node 24) | same |
+| Frontend | React + Tailwind | plain HTML / CSS / JS | same |
+
+No `npm install`, no bundler, starts in under a second, runs offline.
+
+### Run it
+
+```bash
+git clone https://github.com/Relethe/kaijuan.git
+cd kaijuan
+node server.mjs
+```
+
+Requires **Node 24+** (for `node:sqlite`).
+
+- `http://localhost:3000/console` — operator console (main screen): run the pipeline, confirm the two gates
+- `http://localhost:3000/h5` — reader feed (secondary screen)
+- `http://localhost:3000/` — entry
+
+It works offline out of the box: with no LLM key configured, every agent falls back to templates and the demo still completes end to end. To use a real model, copy `.env.example` to `.env`, fill in `LLM_BASE_URL` / `LLM_API_KEY` / `LLM_MODEL` (any OpenAI-compatible endpoint), and restart.
+
+### Known limitations
+
+- The monthly report is HTML (printable to PDF), not a `.pptx` — `pptxgenjs` could not be installed on site
+- No authentication; enrollments are recorded as an anonymous reader
+- SSE pushes the full state every 500 ms — fine for a single-client local demo, would need incremental patches for real concurrency
+
+## License
+
+[MIT](LICENSE) © 2026 Relethe
 
