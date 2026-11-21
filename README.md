@@ -1,11 +1,12 @@
-﻿# 开卷 · 黑客松 Demo
+# 开卷 · 黑客松 Demo
 
 48 小时可演示的垂直切片：**中控台 Agent 流水线 + 读者端 H5**，数据全程联动。
 
 ## 跑起来
 
 ```powershell
-cd 'C:\Users\HUAWEI\Desktop\Result showcase\kaijuan'
+git clone https://github.com/Relethe/kaijuan.git
+cd kaijuan
 node server.mjs
 ```
 
